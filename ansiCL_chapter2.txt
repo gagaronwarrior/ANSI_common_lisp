@@ -1,0 +1,135 @@
+1. 
+a) 14
+b) (1 5)
+c) 7
+d) (nil 3)
+
+2.
+(cons 'a (cons 'b (cons 'c nil)))
+(cons 'a (list 'b 'c))
+(cons 'a '(b c))
+
+3.
+CL-USER> (defun fourth-my(lst)
+	   (car (cdr (cdr (cdr lst)))))
+FOURTH-MY
+CL-USER> (fourth-my '(1 2 3 4 5 6))
+4
+CL-USER> (fourth-my '(1 2 3))
+NIL
+
+4.
+CL-USER> (defun greater-of-two (x y)
+	   (if (> x y)
+	       x
+	       y))
+GREATER-OF-TWO
+CL-USER> (greater-of-two 1 2)
+2
+CL-USER> (greater-of-two 3 2)
+3
+CL-USER> (greater-of-two 2 2)
+2
+
+5.
+a.
+
+6.
+a. (car (car (cdr '(a (b c) d))))
+b. (or 13 (/ 1 0))
+c. (apply #'list 1 nil)
+
+
+7.
+CL-USER> (defun contains-list (lst)
+	   (if (null lst)
+	       nil
+	       (if (listp (car lst))
+		   t
+		   (contains-list (cdr lst)))))
+CONTAINS-LIST
+CL-USER> (contains-list '())
+NIL
+CL-USER> (contains-list '(1))
+NIL
+CL-USER> (contains-list '(1 2))
+NIL
+CL-USER> (contains-list '(1 (2 3) 4))
+T
+
+8.
+a. 
+(defun print-dots (n)
+	   (do ((i 1 (+ i 1)))
+	       ((> i n) 'done)
+	     (format t ". ")))
+PRINT-DOTS
+CL-USER> (print-dots 5)
+. . . . . 
+DONE
+
+CL-USER> (defun print-dots-recur (n)
+	   (if (= n 0)
+	       'done
+	       (progn
+		 (format t ". ")
+		 (print-dots (- n 1)))))
+PRINT-DOTS-RECUR
+CL-USER> (print-dots-recur 5)
+. . . . . 
+DONE
+
+
+b.
+CL-USER> (defun a-times-iter (lst)
+	   (let ((num 0))
+	     (dolist (element lst)
+	       (if (equal element 'a)
+		   (setf num (+ num 1))))
+	     num))
+A-TIMES-ITER
+CL-USER> (a-times-iter '())
+0
+CL-USER> (a-times-iter '(1 2 3))
+0
+CL-USER> (a-times-iter '(1 a b 3 4 a 5 a))
+3
+
+
+CL-USER> (defun a-times (lst)
+	   (if (null lst)
+	       0
+	       (if (equal (car lst) 'a)
+		   (+ 1 (a-times (cdr lst)))
+		   (a-times (cdr lst)))))
+A-TIMES
+CL-USER> (a-times '(1 2 3))
+0
+CL-USER> (a-times '(1 a b a 3 4))
+2
+CL-USER> (a-times '())
+0
+
+9.
+a.remove is not destructive function.
+Remove returns the new list with given elements removed,
+But apply is working on old list which is unchanged.
+
+b.when lst have nil element, x will be nil and if condition will be true and
+summit is called with (cdr lst) which is again nil. This calls for infinite 
+recursion.
+
+CL-USER> (defun summit1 (lst)
+	   (if (null lst)
+	       0
+	       (if (null (car lst))
+		   (summit1 (cdr lst))
+		   (+ (car lst) (summit1 (cdr lst))))))
+SUMMIT1
+CL-USER> (summit1 '(1 2 nil 3 nil 4))
+10
+CL-USER> (summit1 '(nil))
+0
+CL-USER> (summit1 '(1 2 nil))
+3
+CL-USER> 
